@@ -1,0 +1,489 @@
+/* ==========================================================================
+   Custom CSS for Webclass-V2 Theme
+   - Combines original custom styles with requested fixes.
+   ========================================================================== */
+
+/* Global styles */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+  color: #333;
+  padding-top: 56px; /* Add padding for fixed header */
+  overflow-x: hidden; /* Fix 3: Prevent horizontal scrolling on small screens */
+}
+
+/* Optional: Better handling for horizontal scroll on specific elements */
+pre, .highlight {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+}
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+table td, table th {
+    white-space: normal;
+}
+
+
+/* Scroll margin for headings to ensure they're visible below the fixed header */
+h1, h2, h3, h4, h5, h6,
+[id] {
+  scroll-margin-top: 100px; /* Increased value for better spacing */
+  padding-top: 10px; /* Add padding to ensure content is not too close to the top */
+}
+
+/* Fixed header and mobile navigation */
+.fixed-top {
+  z-index: 1030; /* Ensures header is on top */
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add shadow for better visibility */
+  will-change: transform; /* Optimize for animations */
+  transition: transform 0.3s ease; /* Smooth transition for scroll effects */
+}
+
+.mobile-menu {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.mobile-menu a {
+  color: #444;
+  text-decoration: none;
+  display: block;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.mobile-menu a:hover {
+  background-color: #e8e8e8;
+  color: #0066cc;
+}
+
+.mobile-menu a.active {
+  background-color: #e0e0e0;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+.navbar-toggler {
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+}
+
+/* Main container adjustments for fixed header */
+.main-container {
+  padding-top: 1.5rem; /* Increased padding */
+  position: relative;
+  z-index: 1; /* Ensure content is below header */
+}
+
+/* Left sidebar (general TOC) */
+.td-sidebar {
+  background-color: #f0f0f0;
+  border-right: 1px solid #e0e0e0;
+  padding-top: 1rem;
+  position: sticky; /* Keep existing sticky setting */
+  position: -webkit-sticky; /* Add Safari prefix */
+  top: 56px; /* Adjusted for fixed header */
+  height: calc(100vh - 56px); /* Adjusted for fixed header */
+  overflow-y: auto;
+  align-self: flex-start; /* Helps sticky in flex layouts */
+}
+
+.td-sidebar-nav {
+  padding: 0 1rem;
+}
+
+.td-sidebar-nav__section {
+  margin-bottom: 2rem;
+}
+
+.td-sidebar-link__section-title {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.td-sidebar-nav__section ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.td-sidebar-nav__section li {
+  margin-bottom: 0.5rem;
+}
+
+.td-sidebar-nav__section a {
+  color: #444;
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.td-sidebar-nav__section a:hover {
+  background-color: #e8e8e8;
+  color: #0066cc;
+}
+
+.td-sidebar-nav__section a.active {
+  background-color: #e0e0e0;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+/* Main content area */
+.td-main {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  /* Removed height and overflow-y from here, let content determine height */
+  /* height: calc(100vh - 56px); */
+  /* overflow-y: auto; */
+}
+
+.td-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.td-content h2 {
+  font-size: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #444;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.td-content h3 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  color: #555;
+}
+
+.td-content h4 {
+  font-size: 1.25rem;
+  margin-top: 1.25rem;
+  color: #666;
+}
+
+.td-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Right sidebar (page TOC) */
+.td-toc {
+  background-color: #f0f0f0;
+  border-left: 1px solid #e0e0e0;
+  padding-top: 1rem;
+  position: sticky; /* Keep existing sticky setting */
+  position: -webkit-sticky; /* Fix 1 & 2: Add Safari prefix */
+  top: 56px; /* Adjusted for fixed header */
+  height: calc(100vh - 56px); /* Adjusted for fixed header */
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  align-self: flex-start; /* Helps sticky in flex layouts */
+}
+
+/* Fix 1 & 2: Specific sticky rules for Blog/Docs index pages (ensure cross-browser) */
+/* These might override the general .td-toc rule above if the body class is present */
+.td-blog #td-toc,
+.td-docs #td-toc {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 56px; /* Match existing header height */
+    height: calc(100vh - 56px); /* Match existing calculation */
+    overflow-y: auto;
+    align-self: flex-start; /* Good practice for sticky in flex */
+    /* Inherits background, border, padding from the general .td-toc rule */
+}
+
+
+.td-toc-wrapper {
+  padding: 0 1rem;
+}
+
+#TableOfContents {
+  padding-left: 0;
+}
+
+#TableOfContents ul {
+  padding-left: 1.5rem;
+  list-style-type: none;
+}
+
+#TableOfContents a {
+  color: #444;
+  display: block;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+#TableOfContents a:hover {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+/* Blog post styling for teaching units */
+.blog-post {
+  margin-bottom: 3rem;
+}
+
+.post-date {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+/* Fix 4: Hide Header in Landscape Mode on Small Devices */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  .fixed-top { /* Target existing header class */
+    display: none !important; /* Use !important to ensure override */
+  }
+  /* If hiding header removes needed top padding, uncomment below */
+  /* body { padding-top: 0 !important; } */
+}
+
+
+@media (max-width: 767.98px) {
+  .td-sidebar, .td-toc {
+    position: static; /* Overrides sticky on small screens */
+    height: auto;
+    border: none; /* Remove borders on mobile */
+    padding-top: 0.5rem; /* Reduce padding */
+    background-color: transparent; /* Make background transparent perhaps */
+  }
+
+  .td-main {
+    height: auto;
+    padding: 1rem;
+  }
+
+  /* Ensure mobile menus appear below fixed header */
+  .mobile-menu {
+    position: absolute; /* Should this be fixed? Check behavior */
+    width: 100%;
+    background: #fff; /* Add background for readability */
+    top: 56px; /* Position below header */
+    z-index: 1020; /* Below fixed-top (1030) */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-top: 1px solid #e0e0e0; /* Add separator */
+  }
+
+  /* Ensure header stays visible on small screens (already fixed) */
+  /* .fixed-top rule handles this globally */
+
+  /* Fix 5: Mobile TOC Dropdown Behavior Notes:
+     - Header Disappearance: Your z-index for .fixed-top (1030) and .mobile-menu (1020) looks correct.
+       If the header still disappears, inspect elements to see if another element (perhaps related
+       to search or another dropdown) is overlapping with a higher z-index.
+     - Cannot Fold Back: This is almost certainly an HTML/JS issue. Ensure the toggle button
+       has the correct `data-bs-toggle="collapse"` (or `data-toggle`) and `data-bs-target`
+       (or `data-target`) attributes pointing to the collapsible menu's ID. Check for JS errors.
+  */
+}
+
+/* Medium screen adjustments */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  /* Optimize content area on medium screens */
+  .td-main {
+    padding-right: 2rem;
+  }
+
+  /* Style for medium screen TOC toggle */
+  .navbar-toggler {
+    /* Keep existing styles or adjust as needed */
+    /* color: rgba(255,255,255,.5); */ /* Commented out - assuming dark text */
+    /* border-color: rgba(255,255,255,.1); */ /* Commented out - assuming dark text */
+  }
+
+  /* Page TOC dropdown for medium screens - Keep existing style */
+  #pageTOC {
+    position: absolute;
+    right: 0;
+    top: 56px;
+    width: 300px;
+    max-width: 100%;
+    z-index: 1020; /* Below fixed-top */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background-color: #f0f0f0; /* Added background matching sidebar */
+    border: 1px solid #e0e0e0; /* Added border matching sidebar */
+    padding: 1rem; /* Added padding */
+  }
+  #pageTOC #TableOfContents { /* Style TOC within dropdown */
+      padding: 0;
+  }
+}
+
+/* ==========================================================================
+   Media Shortcodes Styling (Existing)
+   ========================================================================== */
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.image-gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.image-gallery img:hover {
+  transform: scale(1.05);
+}
+
+/* Note: PDF styling is now handled IN the shortcode */
+/* Original .pdf-container might conflict, consider removing if using new shortcode */
+/*
+.pdf-container {
+  width: 100%;
+  height: 600px;
+  margin-bottom: 1.5rem;
+}
+*/
+
+.audio-container {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+/* ==========================================================================
+   Quiz Styling (Existing)
+   ========================================================================== */
+.quiz-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.quiz-question {
+  margin-bottom: 1.5rem;
+}
+
+.quiz-options label {
+  display: block;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.quiz-options label:hover {
+  background-color: #e9ecef;
+}
+
+.quiz-text-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.quiz-submit {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quiz-submit:hover {
+  background-color: #0056b3;
+}
+
+/* Fixed TOC Solution
+   This CSS fixes both left and right TOCs to make them truly fixed position
+   instead of sticky, so they don't move when scrolling */
+
+/* Left sidebar (general TOC) - Change from sticky to fixed */
+.td-sidebar {
+  position: fixed !important; /* Override sticky with fixed */
+  top: 56px !important; /* Keep aligned with header */
+  height: calc(100vh - 56px) !important; /* Full height minus header */
+  overflow-y: auto;
+  z-index: 1020; /* High enough to be above content but below header */
+  width: inherit; /* Maintain width from parent container */
+  max-width: inherit; /* Maintain max width from parent container */
+}
+
+/* Right sidebar (page TOC) - Change from sticky to fixed */
+.td-toc {
+  position: fixed !important; /* Override sticky with fixed */
+  top: 56px !important; /* Keep aligned with header */
+  height: calc(100vh - 56px) !important; /* Full height minus header */
+  overflow-y: auto;
+  z-index: 1020; /* High enough to be above content but below header */
+  width: inherit; /* Maintain width from parent container */
+  max-width: inherit; /* Maintain max width from parent container */
+}
+
+/* Fix for Blog/Docs index pages TOC */
+.td-blog #td-toc,
+.td-docs #td-toc {
+  position: fixed !important; /* Override sticky with fixed */
+  top: 56px !important; /* Match header height */
+  height: calc(100vh - 56px) !important; /* Full height minus header */
+}
+
+/* Adjust main content area to account for fixed sidebars */
+.td-main {
+  margin-left: 0; /* Let the grid system handle spacing */
+  margin-right: 0; /* Let the grid system handle spacing */
+}
+
+/* Maintain mobile responsiveness */
+@media (max-width: 767.98px) {
+  .td-sidebar, .td-toc {
+    position: static !important; /* Revert to static on small screens */
+    height: auto !important;
+    width: 100% !important;
+  }
+}
+
+}
+
+
+
+/* ==========================================================================
+   End of Custom CSS
+   ========================================================================== */

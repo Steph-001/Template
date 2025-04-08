@@ -1,0 +1,64 @@
+<!-- layouts/shortcodes/pdf.html -->
+{{ $src := .Get "src" }}
+{{ $height := .Get "height" | default "600px" }} <!-- Default height -->
+{{ $mobileHeight := .Get "mobileHeight" | default "400px" }} <!-- Default mobile height -->
+
+{{/* Attempt to make src relative to page bundle if possible, else treat as static */}}
+{{ $file := .Page.Resources.GetMatch $src }}
+{{ $pdfSrc := "" }}
+{{ if $file }}
+    {{ $pdfSrc = $file.RelPermalink }}
+{{ else }}
+    {{/* Assume it's in /static or an absolute URL */}}
+    {{ $pdfSrc = $src | relURL }}
+{{ end }}
+
+{{ if $pdfSrc }}
+<div class="td-pdf-embed-wrapper mb-4">
+    <style>
+        /* Add some basic styling */
+        .td-pdf-embed {
+            border: 1px solid #ccc;
+            width: 100%;
+            height: {{ $height }};
+        }
+        .td-pdf-fullscreen-link {
+            display: block;
+            text-align: center;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+        .td-pdf-fullscreen-link:hover {
+            background-color: #ddd;
+            text-decoration: none;
+            color: #000;
+        }
+        /* Responsive height for smaller screens */
+        @media (max-width: 767px) {
+            .td-pdf-embed {
+                height: {{ $mobileHeight }};
+            }
+        }
+    </style>
+
+    <object class="td-pdf-embed" data="{{ $pdfSrc }}" type="application/pdf">
+        <p>It appears your browser doesn't support embedding PDFs. You can <a href="{{ $pdfSrc }}" target="_blank" rel="noopener noreferrer">download the PDF file instead</a>.</p>
+    </object>
+
+    <!-- Add the Fullscreen / New Tab Button -->
+    <a href="{{ $pdfSrc }}" target="_blank" rel="noopener noreferrer" class="td-pdf-fullscreen-link">
+        View Fullscreen / New Tab
+    </a>
+</div>
+{{ else }}
+<div class="alert alert-danger" role="alert">
+    PDF Shortcode Error: Could not find PDF file with src "{{ $src }}"
+</div>
+{{ end }}

@@ -1,0 +1,62 @@
+{{ $src := .Get "src" }}
+{{ $title := .Get "title" | default "" }}
+{{ $alt := .Get "alt" | default $title }}
+{{ $class := .Get "class" | default "" }}
+
+<div class="fullscreen-image-container {{ $class }}">
+  <img src="{{ $src }}" alt="{{ $alt }}" title="{{ $title }}" class="fullscreen-image" onclick="openFullscreen(this)">
+</div>
+
+<script>
+function openFullscreen(img) {
+  // Create a fullscreen container
+  const fullscreenContainer = document.createElement('div');
+  fullscreenContainer.className = 'fullscreen-overlay';
+  fullscreenContainer.style.position = 'fixed';
+  fullscreenContainer.style.top = '0';
+  fullscreenContainer.style.left = '0';
+  fullscreenContainer.style.width = '100%';
+  fullscreenContainer.style.height = '100%';
+  fullscreenContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+  fullscreenContainer.style.display = 'flex';
+  fullscreenContainer.style.justifyContent = 'center';
+  fullscreenContainer.style.alignItems = 'center';
+  fullscreenContainer.style.zIndex = '9999';
+  fullscreenContainer.style.cursor = 'pointer';
+  
+  // Create the fullscreen image
+  const fullscreenImg = document.createElement('img');
+  fullscreenImg.src = img.src;
+  fullscreenImg.style.maxWidth = '90%';
+  fullscreenImg.style.maxHeight = '90%';
+  fullscreenImg.style.objectFit = 'contain';
+  
+  // Add close functionality
+  fullscreenContainer.onclick = function() {
+    document.body.removeChild(fullscreenContainer);
+  };
+  
+  // Add the image to the container
+  fullscreenContainer.appendChild(fullscreenImg);
+  
+  // Add the container to the body
+  document.body.appendChild(fullscreenContainer);
+}
+</script>
+
+<style>
+.fullscreen-image {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.fullscreen-image:hover {
+  transform: scale(1.05);
+}
+
+.fullscreen-image-container {
+  display: inline-block;
+  overflow: hidden;
+}
+</style>
+

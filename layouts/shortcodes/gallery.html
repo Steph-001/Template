@@ -1,0 +1,7 @@
+<div class="image-gallery">
+  {{ $imagePaths := split (.Get "images") "," }} {{ range $imagePaths }} {{
+  $trimmedPath := trim . " " }} {{ with $trimmedPath }} {{/* Check if path is
+  not empty */}} {{ if ne . "" }}
+  <img src="{{ . | relURL }}" alt="Gallery image" />
+  {{ end }} {{ end }} {{ end }}
+</div>
