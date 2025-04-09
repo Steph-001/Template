@@ -1,6 +1,9 @@
-<img 
-  src="{{ .Get "src" }}" 
-  alt="{{ .Get "alt" | default "Image" }}"
-  class="img-fluid d-block mx-auto"
-  style="max-width: 100%;">
+<!-- layouts/shortcodes/responsive-image.html -->
+<div style="text-align: center;">
+  <img 
+    src="{{ .Get "src" }}" 
+    alt="{{ .Get "alt" | default "Image" }}" 
+    style="max-width: 100%; height: auto; display: block; margin: 0 auto;" 
+  />
+</div>
 

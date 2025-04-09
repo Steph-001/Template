@@ -17,8 +17,11 @@ draft: false
 
 ### D - The No.1 Ladies' Detective Agency
 
-![Example image](/images/p40_1.jpg)![Example image](/images/p41_2.jpg)
 {{< responsive-img src="/images/p40_1.jpg" alt="Detective image" >}}
+
+{{< spacer height="8rem" >}}
+
+{{< responsive-img src="/images/p41_2.jpg" alt="Detective image" >}}
 
 ### E - A newcomer
 
