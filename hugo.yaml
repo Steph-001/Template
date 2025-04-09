@@ -25,7 +25,7 @@ menu:
 params:
   copyright: "Stéphane Jacquet | All Rights Reserved"
   offlineSearch: true
-  logo: "images/logo.png"
   ui:
+    navbar_logo: false
     breadcrumb_disable: false
     showLightDarkModeMenu: true

@@ -1,8 +1,8 @@
 ---
 title: "Women_detectives"
+linkTitle: "Women Detectives"
 date: 2025-04-08T21:39:39+02:00
 draft: false
-layout: doc
 ---
 
 ### A - Evolving figures
@@ -18,6 +18,7 @@ layout: doc
 ### D - The No.1 Ladies' Detective Agency
 
 ![Example image](/images/p40_1.jpg)![Example image](/images/p41_2.jpg)
+{{< responsive-img src="/images/p40_1.jpg" alt="Detective image" >}}
 
 ### E - A newcomer
 
