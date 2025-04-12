@@ -29,6 +29,12 @@ module:
   #     target: static
   #     path: github.com/google/docsy
 
+  # --- Section to allow raw html within md pages since I trust my own content ---
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
   # --- ADD THIS SECTION TO YOUR hugo.yaml ---
 menu:
   main: # This name MUST match what navbar.html uses (.Site.Menus.main)
@@ -53,8 +59,7 @@ params:
   copyright: "Stéphane Jacquet | All Rights Reserved"
   offlineSearch: true
   ui:
-    navbar_logo: true
-    logo: "/images/logo.svg"
+    navbar_logo: false
     breadcrumb_disable: false
     showLightDarkModeMenu: true
 # You probably don't need build section unless doing advanced things

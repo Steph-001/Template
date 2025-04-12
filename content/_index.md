@@ -2,6 +2,7 @@
 title: "Home"
 linkTitle: "Home"
 type: docs
+description: "my description"
 ---
 
 # Welcome to Your English Class Website
