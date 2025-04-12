@@ -1,0 +1,32 @@
+baseURL: "https://example.org/"
+languageCode: "en-us"
+title: "Your English Class Website"
+
+# --- Hugo Module ---
+module:
+  proxy: "direct"
+  imports:
+    - path: "github.com/google/docsy"
+
+# --- Menu ---
+menu:
+  main:
+    - name: Docs
+      url: /docs/
+      weight: 10
+    - name: Units
+      url: /units/
+      weight: 5
+    - name: News
+      url: /news/
+      weight: 20
+
+# --- Params ---
+params:
+  copyright: "Stéphane Jacquet | All Rights Reserved"
+  offlineSearch: true
+  ui:
+    navbar_logo: true
+    navbar_logo_path: "/images/logo.svg"
+    breadcrumb_disable: false
+    showLightDarkModeMenu: true

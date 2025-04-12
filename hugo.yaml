@@ -1,31 +1,62 @@
-baseURL: "https://example.org/"
+baseURL: "https://example.org/" # Change to your actual base URL
 languageCode: "en-us"
-title: "Your English Class Website"
+title: "   Your English Class Website" # Change to your site title
+# theme: "docsy"  # <--- REMOVE or COMMENT OUT this line
 
-# --- Hugo Module ---
 module:
-  proxy: "direct"
   imports:
-    - path: "github.com/google/docsy"
+    - path: github.com/google/docsy # Tells Hugo to import the Docsy theme module
+      disable: false
+  # You might need mounts depending on how Docsy/your project is structured
+  # Often Hugo handles basic mounts automatically, but being explicit can help
+  # mounts:
+  #   - source: content/en
+  #     target: content
+  #   - source: static
+  #     target: static
+  #   - source: layouts
+  #     target: layouts
+  #   - source: assets
+  #     target: assets
+  #   # Mounts provided by the theme module itself:
+  #   - source: assets
+  #     target: assets
+  #     path: github.com/google/docsy
+  #   - source: layouts
+  #     target: layouts
+  #     path: github.com/google/docsy
+  #   - source: static
+  #     target: static
+  #     path: github.com/google/docsy
 
-# --- Menu ---
+  # --- ADD THIS SECTION TO YOUR hugo.yaml ---
 menu:
-  main:
-    - name: Docs
-      url: /docs/
-      weight: 10
+  main: # This name MUST match what navbar.html uses (.Site.Menus.main)
     - name: Units
-      url: /units/
-      weight: 5
-    - name: News
-      url: /news/
+      # IMPORTANT: Change this to the actual path of your Units section overview page
+      # Examples: "/units/", "/docs/units/", etc. Needs a corresponding _index.md or page.
+      pageRef: /units/
+      weight: 10 # Lower weight appears first
+    - name: Docs
+      # IMPORTANT: Change this to the actual path of your Docs section
+      pageRef: /docs/
       weight: 20
+    - name: News
+      # IMPORTANT: Change this to the actual path of your News section
+      pageRef: /news/
+      weight: 30
+# --- END OF SECTION TO ADD ---
 
-# --- Params ---
+# ... (Rest of your hugo.yaml content) ...
+
 params:
   copyright: "Stéphane Jacquet | All Rights Reserved"
   offlineSearch: true
   ui:
-    navbar_logo: false
+    navbar_logo: true
+    logo: "/images/logo.svg"
     breadcrumb_disable: false
     showLightDarkModeMenu: true
+# You probably don't need build section unless doing advanced things
+# build:
+#  writeStats: true

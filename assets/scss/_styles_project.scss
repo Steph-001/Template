@@ -1,0 +1,40 @@
+// Add space between logo and title
+.navbar-brand__logo {
+  // Add !important to the properties you want to force
+  margin-right: 0.75rem !important;
+}
+
+// assets/scss/_styles_project.scss
+
+.td-footer {
+  // -- Force Padding --
+  // Make sure both top and bottom are overridden
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+
+  // -- Force Height Reset --
+  // Override any min-height or height that might be active
+  min-height: auto !important;
+  height: auto !important;
+
+  // -- Fix Vertical Alignment (Crucial) --
+  // Re-establish flex properties for centering
+  display: flex !important;        // Ensure it uses flexbox
+  align-items: center !important; // Vertically center the content
+  // You might also need justify-content if horizontal alignment is off
+  // justify-content: center !important; // Horizontally center (if needed)
+
+  // -- Reduce Inner Element Spacing --
+  // Target paragraphs inside the footer directly
+  p {
+    margin-top: 0.25rem !important;    // Reduce space above paragraphs significantly
+    margin-bottom: 0.25rem !important; // Reduce space below paragraphs significantly
+  }
+  // Add rules for other elements inside if needed (e.g., lists, divs)
+  // ul, div { margin: 0 !important; }
+}
+// Optional: Control logo image size via CSS
+// .navbar-brand__logo img {
+//   height: 35px !important; // Example height
+//   width: auto !important; // Keep aspect ratio
+// }
