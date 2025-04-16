@@ -1,6 +1,7 @@
 ---
-title: "Unit 1: Introduction to Widgets"
+title: "Unit 2: Introduction to Widgets"
 weight: 10
+draft: true
 # ... other front matter ...
 lexicon:
   - term: "Widget"

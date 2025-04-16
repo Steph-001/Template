@@ -1,66 +1,84 @@
-<style>
-  .image-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem 0;
-  }
+{{/* layouts/shortcodes/gallery.html - Flexbox Layout - NO CSS COMMENT BLOCK */}}
+{{/* ============================================================================== */}}
+{{/*                                                                                */}}
+{{/*  Displays a responsive image gallery from a 'gallery' subfolder                */}}
+{{/*  within the current Page Bundle, using a flexbox layout.                       */}}
+{{/*                                                                                */}}
+{{/*  Parameters:                                                                   */}}
+{{/*    max_width (optional): Maximum width for EACH image (e.g., "150px"). Acts   */}}
+{{/*                          as a ceiling to the responsive percentage widths      */}}
+{{/*                          defined in CSS.                                       */}}
+{{/*    align (optional): Horizontal alignment of items within gallery rows         */}}
+{{/*                      ("center" or "left"). Defaults to "center".               */}}
+{{/*    link (optional): Set to "true" to wrap each image in a link to its          */}}
+{{/*                     full-size version. Defaults to false.                      */}}
+{{/*                                                                                */}}
+{{/*  Usage examples:                                                               */}}
+{{/*    {{< gallery >}} (Center-aligned, responsive columns via CSS)              */}}
+{{/*    {{< gallery max_width="120px" >}} (Images capped at 120px width)          */}}
+{{/*    {{< gallery max_width="200px" align="left" >}} (Left-aligned items)       */}}
+{{/*    {{< gallery max_width="150px" link="true" >}} (Linked images)             */}}
+{{/*                                                                                */}}
+{{/*  Note: Requires CSS to be added to your site's main CSS file for layout.     */}}
+{{/*        (See previous examples for the required CSS rules)                      */}}
+{{/*                                                                                */}}
+{{/* ============================================================================== */}}
 
-  .image-gallery img {
-    width: 100%;
-    max-width: 320px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-  }
+{{ $maxWidth := .Get "max_width" }}  {{/* Param: Max width per image */}}
+{{ $align := .Get "align" | default "center" }} {{/* Param: Align gallery items ('center' or 'left') */}}
+{{ $linkImages := eq (.Get "link" | default "false") "true" }} {{/* Param: Link images? (true/false) */}}
 
-  .image-gallery img:hover {
-    transform: scale(1.03);
-  }
+{{/* --- Find image resources --- */}}
+{{/* Look ONLY within the 'gallery' subfolder of the current page bundle */}}
+{{ $images := .Page.Resources.Match "gallery/*" }}
+{{/* Ensure we only process actual image types */}}
+{{ $images = where $images "ResourceType" "image" }}
 
-  /* Mobile: Add padding and ensure images take up full width */
-  @media (max-width: 768px) {
-    .image-gallery {
-      padding: 2rem;
-    }
-    .image-gallery img {
-      max-width: 100%;
-    }
-  }
 
-  /* Tablet (768px to 1023px): Two images per row */
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .image-gallery img {
-      max-width: 48%; /* Two images per row */
-    }
-  }
+{{/* --- Process if images are found --- */}}
+{{ if $images }}
 
-  /* Desktop (1024px to 1279px): Three images per row */
-  @media (min-width: 1024px) and (max-width: 1279px) {
-    .image-gallery img {
-      max-width: 30%; /* Three images per row */
-    }
-  }
+  {{/* Determine flexbox justify-content based on alignment parameter */}}
+  {{ $justifyContent := "center" }} {{/* Default value */}}
+  {{ if eq $align "left" }}
+    {{ $justifyContent = "flex-start" }} {{/* Value for left alignment */}}
+  {{ end }} {{/* End if eq $align */}}
 
-  /* Larger Desktop (1280px and above): Four images per row */
-  @media (min-width: 1280px) {
-    .image-gallery img {
-      max-width: 23%; /* Four images per row */
-    }
-  }
-</style>
+  {{/* --- Generate Gallery HTML --- */}}
+  {{/* Apply justify-content directly via style for dynamic control */}}
+  <div class="gallery-container" style="justify-content: {{ $justifyContent }};">
+    {{ range $images }}
+      {{ $image := . }}
+      {{/* Alt text: Use image Title if set, otherwise fallback to filename */}}
+      {{ $altText := $image.Title | default (printf "Gallery image: %s" $image.Name) }}
 
-<div class="image-gallery">
-  {{ $imagePaths := split (.Get "images") "," }}
-  {{ range $imagePaths }}
-    {{ $trimmedPath := trim . " " }}
-    {{ with $trimmedPath }}
-      {{ if ne . "" }}
-        <img src="{{ . | relURL }}" alt="Gallery image">
-      {{ end }}
-    {{ end }}
-  {{ end }}
-</div>
+      <div class="gallery-item">
+          {{/* Conditionally wrap image in a link */}}
+          {{ if $linkImages }}
+            <a href="{{ $image.RelPermalink }}" title="{{ $image.Title | default $altText }}">
+          {{ end }} {{/* End if $linkImages (start link) */}}
 
+          {{/* The image tag itself */}}
+          <img src="{{ $image.RelPermalink }}"
+               alt="{{ $altText }}"
+               loading="lazy"
+               {{/* Apply max_width parameter as inline style if provided */}}
+               {{ with $maxWidth }} style="max-width: {{ . }};" {{ end }}
+          />
+
+          {{/* Close link tag if linking is enabled */}}
+          {{ if $linkImages }}
+            </a>
+          {{ end }} {{/* End if $linkImages (close link) */}}
+      </div> {{/* End gallery-item */}}
+    {{ end }} {{/* End range $images */}}
+  </div> {{/* End gallery-container */}}
+
+{{ else }} {{/* Else block for 'if $images' */}}
+
+  {{/* Show warning if no images were found in the 'gallery' subfolder */}}
+  <div class="alert alert-warning" role="alert">
+    Gallery Shortcode: No images found in the 'gallery' subfolder of this page bundle.
+  </div>
+
+{{ end }} {{/* End if $images */}}

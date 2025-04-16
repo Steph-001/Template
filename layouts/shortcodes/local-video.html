@@ -1,5 +1,62 @@
-<video controls poster="{{ .Get "poster" }}"
-  style="width: 100%; height: auto; max-width: 720px; display: block; margin: 0 auto;">
-  <source src="{{ .Get "src" }}" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+{{/* layouts/shortcodes/video-with-poster.html - Page Bundle Aware */}}
+{{/* ... (parameter docs comments - ensure src/poster usage mentions filename) ... */}}
+
+{{ $srcParam := .Get "src" }}      {{/* Expects filename like "my-video.mp4" */}}
+{{ $posterParam := .Get "poster" }} {{/* Expects filename like "poster.jpg" */}}
+{{ $align := .Get "align" | default "center" }}
+{{ $maxWidthParam := .Get "max_width" }}
+
+{{ $videoSrc := "" }}
+{{ $videoResource := "" }}
+{{ $posterSrc := "" }}
+{{ $posterResource := "" }}
+
+{{/* Process video source */}}
+{{ with $srcParam }}
+  {{ $videoResource = $.Page.Resources.GetMatch . }}
+{{ end }}
+{{ if $videoResource }}
+  {{ $videoSrc = $videoResource.RelPermalink }}
+{{ else if $srcParam }}
+  {{ warnf "video-with-poster shortcode: Could not find video '%s' in Page Resources for '%s'. Falling back to relURL." $srcParam $.Page.File.Path }}
+  {{ $videoSrc = $srcParam | relURL }}
+{{ end }}
+
+{{/* Process poster source */}}
+{{ with $posterParam }}
+  {{ $posterResource = $.Page.Resources.GetMatch . }}
+{{ end }}
+{{ if $posterResource }}
+  {{ $posterSrc = $posterResource.RelPermalink }}
+{{ else if $posterParam }}
+  {{ warnf "video-with-poster shortcode: Could not find poster '%s' in Page Resources for '%s'. Falling back to relURL." $posterParam $.Page.File.Path }}
+  {{ $posterSrc = $posterParam | relURL }}
+{{ end }}
+
+
+{{ if $videoSrc }} {{/* Only render if we have a video source */}}
+  {{ $videoClasses := "img-fluid rounded d-block mb-3" }}
+  {{ if eq $align "center" }}
+    {{ $videoClasses = printf "%s %s" $videoClasses "mx-auto" }}
+  {{ end }}
+
+  <video controls {{ with $posterSrc }}poster="{{ . }}"{{ end }}
+    class="{{ $videoClasses }}"
+    {{ with $maxWidthParam }} style="max-width: {{ . }};" {{ end }}
+    >
+    <source src="{{ $videoSrc }}" type="{{ .Get "type" | default "video/mp4" }}">
+    {{ with .Get "src_webm" }}
+      {{ $webmRes := $.Page.Resources.GetMatch . }}
+      {{ if $webmRes }} <source src="{{ $webmRes.RelPermalink }}" type="video/webm"> {{ else }} <source src="{{ . | relURL }}" type="video/webm"> {{ warnf "video-with-poster: Could not find webm '%s' in Resources." . }} {{ end }}
+    {{ end }}
+     {{ with .Get "src_ogg" }}
+      {{ $oggRes := $.Page.Resources.GetMatch . }}
+       {{ if $oggRes }} <source src="{{ $oggRes.RelPermalink }}" type="video/ogg"> {{ else }} <source src="{{ . | relURL }}" type="video/ogg"> {{ warnf "video-with-poster: Could not find ogg '%s' in Resources." . }} {{ end }}
+    {{ end }}
+    Your browser does not support the video tag.
+  </video>
+{{ else }}
+  <div class="alert alert-danger" role="alert">
+    video-with-poster Shortcode Error: Could not determine video source for '{{ $srcParam | default "(not provided)" }}'.
+  </div>
+{{ end }}

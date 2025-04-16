@@ -1,0 +1,66 @@
+<style>
+  .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .image-gallery img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .image-gallery img:hover {
+    transform: scale(1.03);
+  }
+
+  /* Mobile: Add padding and ensure images take up full width */
+  @media (max-width: 768px) {
+    .image-gallery {
+      padding: 2rem;
+    }
+    .image-gallery img {
+      max-width: 100%;
+    }
+  }
+
+  /* Tablet (768px to 1023px): Two images per row */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .image-gallery img {
+      max-width: 48%; /* Two images per row */
+    }
+  }
+
+  /* Desktop (1024px to 1279px): Three images per row */
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .image-gallery img {
+      max-width: 30%; /* Three images per row */
+    }
+  }
+
+  /* Larger Desktop (1280px and above): Four images per row */
+  @media (min-width: 1280px) {
+    .image-gallery img {
+      max-width: 23%; /* Four images per row */
+    }
+  }
+</style>
+
+<div class="image-gallery">
+  {{ $imagePaths := split (.Get "images") "," }}
+  {{ range $imagePaths }}
+    {{ $trimmedPath := trim . " " }}
+    {{ with $trimmedPath }}
+      {{ if ne . "" }}
+        <img src="{{ . | relURL }}" alt="Gallery image">
+      {{ end }}
+    {{ end }}
+  {{ end }}
+</div>
+

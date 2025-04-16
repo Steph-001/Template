@@ -1,0 +1,111 @@
+
+{{/* fullscreen-image.html */}}
+{{ $src := .Get "src" | relURL }}
+{{ $title := .Get "title" | default "" }}
+{{ $alt := .Get "alt" | default $title }}
+{{ $id := printf "fs-img-%d" now.UnixNano }}
+{{ $extraClass := .Get "class" | default "" }}
+
+<div class="text-center mb-3 {{ $extraClass }}">
+  <img
+    id="{{ $id }}"
+    src="{{ $src }}"
+    alt="{{ $alt }}"
+    title="{{ $title | default ($alt | default "Click to enlarge") }}"
+    class="img-fluid rounded modal-image-trigger"
+    style="max-width: 80%; height: auto;"
+    onclick="openImageModal_{{ $id | safeJS }}(this)"
+    tabindex="0"
+    role="button"
+    aria-label="Enlarge image: {{ $alt }}"
+  >
+</div>
+
+{{/* Inline JS safely embedded */}}
+{{ $script := printf `
+<script>
+  function openImageModal_%[1]s(imgElement) {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+    overlay.style.display = 'flex';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.zIndex = '1055';
+    overlay.style.cursor = 'pointer';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Image viewer');
+
+    const modalImg = document.createElement('img');
+    modalImg.src = imgElement.src;
+    modalImg.alt = imgElement.alt;
+    modalImg.style.maxWidth = '90vw';
+    modalImg.style.maxHeight = '90vh';
+    modalImg.style.objectFit = 'contain';
+    modalImg.style.display = 'block';
+    modalImg.style.cursor = 'default';
+
+    const closeViewer = () => {
+      if (document.body.contains(overlay)) {
+        document.body.removeChild(overlay);
+      }
+      const trigger = document.getElementById('%[1]s');
+      if (trigger) trigger.focus();
+    };
+
+    overlay.addEventListener('click', function(event) {
+      if (event.target === overlay) {
+        closeViewer();
+      }
+    });
+
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape') {
+        closeViewer();
+        document.removeEventListener('keydown', handleEscKey);
+      }
+    };
+    document.addEventListener('keydown', handleEscKey);
+
+    overlay.appendChild(modalImg);
+    document.body.appendChild(overlay);
+    modalImg.focus();
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const triggerImg = document.getElementById('%[1]s');
+    if (triggerImg) {
+      triggerImg.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openImageModal_%[1]s(triggerImg);
+        }
+      });
+    }
+  });
+</script>
+` $id | safeHTML }}
+{{ $script }}
+
+{{/* Inline CSS safely embedded */}}
+{{ $style := `
+<style>
+  .modal-image-trigger {
+    cursor: zoom-in;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+  .modal-image-trigger:hover,
+  .modal-image-trigger:focus {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    outline: 2px solid dodgerblue;
+    outline-offset: 2px;
+  }
+</style>
+` | safeHTML }}
+{{ $style }}

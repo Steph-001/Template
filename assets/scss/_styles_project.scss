@@ -38,3 +38,72 @@
 //   height: 35px !important; // Example height
 //   width: auto !important; // Keep aspect ratio
 // }
+
+// ==========================================================================
+// Project Specific Gallery Styling
+// ==========================================================================
+
+.gallery-container {
+  display: flex;
+  flex-wrap: wrap;
+  // justify-content is set via inline style from the shortcode based on 'align' param
+  gap: 1rem; // Spacing between items - ADJUST AS NEEDED
+  padding: 1rem 0; // Optional padding for the container
+  margin-bottom: 1.5rem; // Spacing below the gallery
+}
+
+.gallery-item {
+  // Flex items grow/shrink based on img max-width rules below
+  // Add styles here if needed for the item wrapper itself
+}
+
+.gallery-item img {
+  display: block; // Prevent extra space below image
+  width: 100%; // Image tries to fill its flex item container
+  height: auto; // Maintain aspect ratio
+  // max-width rules below control the number of columns
+  border-radius: 8px; // Your styling
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // Your styling
+  transition: transform 0.2s ease-in-out; // Your styling
+  // Inline style max-width from shortcode PARAMETER acts as a ceiling
+}
+
+.gallery-item img:hover {
+  transform: scale(1.03); // Your styling
+}
+
+// --- Responsive Columns for Gallery ---
+
+// Mobile: One image per row (effectively)
+@media (max-width: 767px) {
+  .gallery-container {
+     padding: 1rem; // Example: Add padding on mobile
+  }
+  .gallery-item img {
+     // Takes full width, respecting container padding & gap
+     max-width: 100%;
+  }
+}
+
+// Tablet (768px to 1023px): ~Two images per row
+@media (min-width: 768px) and (max-width: 1023px) {
+  .gallery-item img {
+     max-width: 48%; // Adjust percentage slightly for gap
+  }
+}
+
+// Desktop (1024px to 1279px): ~Three images per row
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .gallery-item img {
+     max-width: 30%; // Adjust percentage slightly for gap
+  }
+}
+
+// Larger Desktop (1280px and above): ~Four images per row
+@media (min-width: 1280px) {
+  .gallery-item img {
+     max-width: 23%; // Adjust percentage slightly for gap
+  }
+}
+
+// --- End Gallery Styling ---
