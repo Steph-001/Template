@@ -1,84 +1,240 @@
-{{/* layouts/shortcodes/gallery.html - Flexbox Layout - NO CSS COMMENT BLOCK */}}
-{{/* ============================================================================== */}}
-{{/*                                                                                */}}
-{{/*  Displays a responsive image gallery from a 'gallery' subfolder                */}}
-{{/*  within the current Page Bundle, using a flexbox layout.                       */}}
-{{/*                                                                                */}}
-{{/*  Parameters:                                                                   */}}
-{{/*    max_width (optional): Maximum width for EACH image (e.g., "150px"). Acts   */}}
-{{/*                          as a ceiling to the responsive percentage widths      */}}
-{{/*                          defined in CSS.                                       */}}
-{{/*    align (optional): Horizontal alignment of items within gallery rows         */}}
-{{/*                      ("center" or "left"). Defaults to "center".               */}}
-{{/*    link (optional): Set to "true" to wrap each image in a link to its          */}}
-{{/*                     full-size version. Defaults to false.                      */}}
-{{/*                                                                                */}}
-{{/*  Usage examples:                                                               */}}
-{{/*    {{< gallery >}} (Center-aligned, responsive columns via CSS)              */}}
-{{/*    {{< gallery max_width="120px" >}} (Images capped at 120px width)          */}}
-{{/*    {{< gallery max_width="200px" align="left" >}} (Left-aligned items)       */}}
-{{/*    {{< gallery max_width="150px" link="true" >}} (Linked images)             */}}
-{{/*                                                                                */}}
-{{/*  Note: Requires CSS to be added to your site's main CSS file for layout.     */}}
-{{/*        (See previous examples for the required CSS rules)                      */}}
-{{/*                                                                                */}}
-{{/* ============================================================================== */}}
+{{/* layouts/shortcodes/gallery.html - Flexbox Layout with Fullscreen Modal */}}
+{{/*
+Displays a responsive image gallery (flexbox layout) from a 'gallery' subfolder.
+Each image opens in a fullscreen modal overlay when clicked.
 
-{{ $maxWidth := .Get "max_width" }}  {{/* Param: Max width per image */}}
-{{ $align := .Get "align" | default "center" }} {{/* Param: Align gallery items ('center' or 'left') */}}
-{{ $linkImages := eq (.Get "link" | default "false") "true" }} {{/* Param: Link images? (true/false) */}}
+Parameters:
+max_width (optional): Max width for EACH INLINE image (e.g., "150px").
+align (optional): Horizontal alignment of items within gallery rows ("center" or "left"). Defaults to "center".
+link (optional): Wraps image in link (primarily useful for right-click/new tab). Defaults to false.
 
-{{/* --- Find image resources --- */}}
-{{/* Look ONLY within the 'gallery' subfolder of the current page bundle */}}
-{{ $images := .Page.Resources.Match "gallery/*" }}
-{{/* Ensure we only process actual image types */}}
-{{ $images = where $images "ResourceType" "image" }}
+Usage examples:
+{{< gallery>}}
+  {{< gallery max_width="120px">}}
+    {{< gallery max_width="200px" align="left">}}
+      {{< gallery link="true">}} {{/* Link still exists, but click opens modal */}}
+        */}}
 
+        {{ $maxWidth := .Get "max_width" }}
+        {{ $align := .Get "align" | default "center" }}
+        {{ $linkImages := eq (.Get "link" | default "false") "true" }}
 
-{{/* --- Process if images are found --- */}}
-{{ if $images }}
+        {{ $images := .Page.Resources.Match "gallery/*" }}
+        {{ $images = where $images "ResourceType" "image" }}
 
-  {{/* Determine flexbox justify-content based on alignment parameter */}}
-  {{ $justifyContent := "center" }} {{/* Default value */}}
-  {{ if eq $align "left" }}
-    {{ $justifyContent = "flex-start" }} {{/* Value for left alignment */}}
-  {{ end }} {{/* End if eq $align */}}
+        {{ if $images }}
 
-  {{/* --- Generate Gallery HTML --- */}}
-  {{/* Apply justify-content directly via style for dynamic control */}}
-  <div class="gallery-container" style="justify-content: {{ $justifyContent }};">
-    {{ range $images }}
-      {{ $image := . }}
-      {{/* Alt text: Use image Title if set, otherwise fallback to filename */}}
-      {{ $altText := $image.Title | default (printf "Gallery image: %s" $image.Name) }}
+        {{ $justifyContent := "center" }}
+        {{ if eq $align "left" }}
+        {{ $justifyContent = "flex-start" }}
+        {{ end }}
 
-      <div class="gallery-item">
-          {{/* Conditionally wrap image in a link */}}
-          {{ if $linkImages }}
-            <a href="{{ $image.RelPermalink }}" title="{{ $image.Title | default $altText }}">
-          {{ end }} {{/* End if $linkImages (start link) */}}
+        {{/* Generate a unique ID for this specific gallery instance */}}
+        {{ $galleryID := printf "gallery-%s" (substr .Page.File.UniqueID 0 8) }}
+        {{/* --- Embedded CSS for Gallery Layout and Modal Trigger --- */}}
+        <style>
+          /* Styles specific to this gallery instance */
+          #{{ $galleryID }}
+          
 
-          {{/* The image tag itself */}}
-          <img src="{{ $image.RelPermalink }}"
-               alt="{{ $altText }}"
-               loading="lazy"
-               {{/* Apply max_width parameter as inline style if provided */}}
-               {{ with $maxWidth }} style="max-width: {{ . }};" {{ end }}
-          />
+          .gallery-container-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem 0;
+            margin-bottom: 1.5rem;
 
-          {{/* Close link tag if linking is enabled */}}
-          {{ if $linkImages }}
-            </a>
-          {{ end }} {{/* End if $linkImages (close link) */}}
-      </div> {{/* End gallery-item */}}
-    {{ end }} {{/* End range $images */}}
-  </div> {{/* End gallery-container */}}
+            justify-content: {
+                {
+                $justifyContent
+              }
+            }
 
-{{ else }} {{/* Else block for 'if $images' */}}
+            ;
+          }
 
-  {{/* Show warning if no images were found in the 'gallery' subfolder */}}
-  <div class="alert alert-warning" role="alert">
-    Gallery Shortcode: No images found in the 'gallery' subfolder of this page bundle.
-  </div>
+          #{{ $galleryID }}
+          
 
-{{ end }} {{/* End if $images */}}
+          .gallery-item {
+            /* Flex items adjust based on img max-width */
+          }
+
+          #{{ $galleryID }}
+          
+
+          .gallery-item img.gallery-modal-trigger {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            cursor: zoom-in;
+            /* Indicate clickable */
+          }
+
+          #{{ $galleryID }}
+          
+
+          .gallery-item img.gallery-modal-trigger:hover,
+          #{{ $galleryID }}
+          
+
+          .gallery-item img.gallery-modal-trigger:focus {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            outline: 2px solid dodgerblue;
+            outline-offset: 3px;
+          }
+
+          /* Responsive Columns (same as before, but scoped) */
+          @media (max-width: 767px) {
+            #{{ $galleryID }}
+          
+
+          .gallery-container-inner {
+            padding: 1rem;
+          }
+
+          #{{ $galleryID }}
+          
+
+          .gallery-item img.gallery-modal-trigger {
+            max-width: 100%;
+          }
+          }
+
+          @media (min-width: 768px) and (max-width: 1023px) {
+            #{{ $galleryID }}
+          
+
+          .gallery-item img.gallery-modal-trigger {
+            max-width: 48%;
+          }
+          }
+
+          @media (min-width: 1024px) and (max-width: 1279px) {
+            #{{ $galleryID }}
+          
+
+          .gallery-item img.gallery-modal-trigger {
+            max-width: 30%;
+          }
+          }
+
+          @media (min-width: 1280px) {
+            #{{ $galleryID }}
+          
+
+          .gallery-item img.gallery-modal-trigger {
+            max-width: 23%;
+          }
+          }
+        </style>
+
+        {{/* Add the unique ID to the main container */}}
+        <div id="{{ $galleryID }}" class="gallery-wrapper">
+          <div class="gallery-container-inner">
+            {{ range $images }}
+            {{ $image := . }}
+            {{ $altText := $image.Title | default (printf "Gallery image: %s" $image.Name) }}
+            {{ $imgTitle := $image.Title | default "Click to enlarge" }}
+
+            <div class="gallery-item">
+              {{ if $linkImages }}
+              {{/* Link remains for accessibility/SEO/right-click, but JS prevents default click */}}
+              <a href="{{ $image.RelPermalink }}" title="View full image: {{ $altText }}" target="_blank">
+                {{ end }}
+
+                <img src="{{ $image.RelPermalink }}" alt="{{ $altText }}" title="{{ $imgTitle }}"
+                  class="gallery-modal-trigger" {{/* Class for JS targeting */}} loading="lazy" tabindex="0" {{/* Make
+                  focusable */}} role="button" aria-label="Enlarge image: {{ $altText }}" {{ with $maxWidth }}
+                  style="max-width: {{ . }};" {{ end }} />
+
+                {{ if $linkImages }}
+              </a>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </div>
+
+        {{/* --- Embedded JS for Modal (using Event Delegation) --- */}}
+        <script>
+          (function () {
+            const galleryElement = document.getElementById("{{ $galleryID }}");
+
+            if (galleryElement) {
+
+              // Define openImageModal function within scope
+              function openImageModal(imgElement) {
+                if (document.querySelector('.fullscreen-modal-overlay')) return; // Prevent multiple modals
+
+                const overlay = document.createElement('div');
+                overlay.className = 'fullscreen-modal-overlay';
+                overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 1055; cursor: pointer;`;
+                overlay.setAttribute('role', 'dialog');
+                overlay.setAttribute('aria-modal', 'true');
+                overlay.setAttribute('aria-label', 'Image viewer - Click outside or press Escape to close');
+
+                const modalImg = document.createElement('img');
+                modalImg.src = imgElement.src;
+                modalImg.alt = imgElement.alt;
+                modalImg.style.cssText = `max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; cursor: default;`;
+
+                let originalFocusElement = document.activeElement === imgElement ? imgElement : null; // Store focus only if trigger had it
+
+                const closeViewer = () => {
+                  if (document.body.contains(overlay)) {
+                    document.body.removeChild(overlay);
+                  }
+                  document.removeEventListener('keydown', handleEscKey);
+                  if (originalFocusElement && document.body.contains(originalFocusElement)) {
+                    originalFocusElement.focus(); // Return focus only if we stored it and it still exists
+                  } else if (document.body.contains(imgElement)) {
+                    imgElement.focus(); // Fallback to trigger element if original focus lost
+                  }
+                };
+
+                overlay.addEventListener('click', (event) => {if (event.target === overlay) closeViewer();});
+
+                const handleEscKey = (event) => {if (event.key === 'Escape') closeViewer();};
+                document.addEventListener('keydown', handleEscKey);
+
+                overlay.appendChild(modalImg);
+                document.body.appendChild(overlay);
+              } // End openImageModal
+
+              // Event Delegation for Click
+              galleryElement.addEventListener('click', function (event) {
+                // Check if the clicked element is an image we care about
+                const clickedImage = event.target.closest('img.gallery-modal-trigger');
+                if (clickedImage && galleryElement.contains(clickedImage)) {
+                  if (event.target.closest('a')) {
+                    event.preventDefault(); // Prevent link navigation if image is inside link
+                  }
+                  openImageModal(clickedImage);
+                }
+              });
+
+              // Event Delegation for Keydown (Enter/Space)
+              galleryElement.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  const focusedImage = event.target.closest('img.gallery-modal-trigger');
+                  if (focusedImage && galleryElement.contains(focusedImage)) {
+                    event.preventDefault(); // Prevent default space scroll / link activation
+                    openImageModal(focusedImage);
+                  }
+                }
+              });
+
+            } // End if(galleryElement)
+          })();
+        </script>
+
+        {{ else }}
+        <div class="alert alert-warning" role="alert">
+          Gallery Shortcode: No images found in the 'gallery' subfolder of this page bundle.
+        </div>
+        {{ end }}

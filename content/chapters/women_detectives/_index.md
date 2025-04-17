@@ -22,7 +22,7 @@ weight: 1
 
 {{< spacer height="4rem" >}}
 
-{{< fullscreen-image src="p41_2.jpg" alt="Detective image" >}}
+{{< fullscreen-image src="p41_2.jpg" alt="Detective image" max_width="30px" align="left" >}}
 
 # Bootstrap stuff
 
@@ -40,7 +40,7 @@ weight: 1
 
 ### F - Inside the FBI
 
-{{< local-video src="FBI.mp4" poster="output.png" max_width="400px" align="left">}}
+{{< local-video src="FBI.mp4" poster="output.png" max_width="300px" align="left">}}
 
 ### G - Reading about female detectves
 

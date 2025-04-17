@@ -52,6 +52,12 @@
     {{ $imgClasses = printf "%s %s" $imgClasses "mx-auto" }} {{/* Add centering */}}
   {{ end }}
 
+  {{/* --- DEBUGGING --- */}}
+  <!-- FS Img Max Width Param: [{{ $maxWidthParam }}] -->
+  {{/* --- END DEBUGGING --- */}}
+
+
+
   {{/* --- Generate HTML --- */}}
   <div class="mb-3 {{ $extraClass }}"> {{/* Outer div only for margin and extra class */}}
     <img
