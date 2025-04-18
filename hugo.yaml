@@ -16,13 +16,10 @@ outputs: # Top-level default outputs
     - HTML
 
 taxonomies:
-    tag: tags
-    skill: skills
-    unit: units
-    category: categories
-    
-
-
+  tag: tags
+  skill: skills
+  unit: units
+  category: categories
 
 module:
   imports:
@@ -64,10 +61,6 @@ menu:
       # Examples: "/units/", "/docs/units/", etc. Needs a corresponding _index.md or page.
       pageRef: /chapters/
       weight: 10 # Lower weight appears first
-    - name: Docs
-      # IMPORTANT: Change this to the actual path of your Docs section
-      pageRef: /docs/
-      weight: 20
     - name: News
       # IMPORTANT: Change this to the actual path of your News section
       pageRef: /news/

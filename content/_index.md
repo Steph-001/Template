@@ -5,7 +5,7 @@ type: docs
 description: "my description"
 ---
 
-# Welcome to Your English Class Website
+# Bienvenue à tous
 
 This website is work in progress. It is meant to centralise all information and documents about your English class. I will try to make this resource as user-friendly as possible.
 

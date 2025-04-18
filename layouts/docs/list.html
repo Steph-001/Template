@@ -1,0 +1,66 @@
+{{ define "main" }}
+
+
+ <div class="container px-4 py-5"> {{/* Using Bootstrap container for layout */}}
+
+   {{/* --- 1. Static Welcome Section --- */}}
+   <section class="row td-box td-box--primary mb-5"> {{/* Example styling classes - adjust as needed */}}
+     <div class="col">
+       <h2>Welcome to the Site!</h2>
+       <p>Your introductory text goes here. Explain the purpose of the site, etc.</p>
+       <p>This content is directly written in the <code>layouts/index.html</code> file.</p>
+       {{/* If you prefer content from content/_index.md, use this instead: */}}
+       {{/* {{ with .Site.GetPage "/" }} {{ with .Content }}<div class="content">{{ . }}</div>{{ end }}{{ end }} */}}
+     </div>
+   </section>
+
+   {{/* --- 2. Latest News Section --- */}}
+   <section class="latest-news mb-5">
+     <h2 class="text-center mb-4">Latest News</h2>
+     {{ $newsListPage := .Site.GetPage "section" "news" }} {{/* Get the News list page */}}
+     {{/* Find the 3 most recent news pages (ensure they are not _index.md files) */}}
+     {{ $recentNews := where .Site.RegularPages "Section" "news" | first 3 }}
+
+     {{ if $recentNews }}
+       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"> {{/* Adjust columns for different screen sizes */}}
+         {{ range $recentNews }}
+           <div class="col d-flex align-items-stretch"> {{/* Use d-flex for equal height cards */}}
+             <div class="card h-100"> {{/* h-100 works with d-flex parent */}}
+               {{/* Optional: Add image if your news posts have one */}}
+               {{ with .Params.image }}
+                 {{ $img := $.Site.GetPage . }} {{/* Assume image path is relative to site root or use Resources if in bundle */}}
+                 {{ if $img }}
+                   <img src="{{ $img.RelPermalink }}" class="card-img-top" alt="">
+                 {{/* Add logic here to find image resource if needed */}}
+                 {{ end }}
+               {{ end }}
+               <div class="card-body d-flex flex-column">
+                 <h5 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h5>
+                 <p class="card-text">{{ .Summary | plainify | truncate 120 }}</p> {{/* Show summary */}}
+                 <div class="mt-auto"> {{/* Push date/link down */}}
+                    <small class="text-muted">{{ .Date.Format (.Site.Params.time_format_default | default "January 2, 2006") }}</small> {{/* Use site's date format */}}
+                 </div>
+               </div>
+               <div class="card-footer">
+                   <a href="{{ .RelPermalink }}" class="btn btn-sm btn-outline-primary">Read More</a>
+               </div>
+             </div>
+           </div>
+         {{ end }}
+       </div>
+     {{ else }}
+       <p class="text-center">No recent news available.</p>
+     {{ end }}
+   </section>
+
+   {{/* --- 3. Link to Main News Page --- */}}
+   {{ if $newsListPage }}
+   <div class="text-center mb-5">
+     <a href="{{ $newsListPage.RelPermalink }}" class="btn btn-lg btn-secondary">View All News</a>
+   </div>
+   {{ end }}
+
+ </div> {{/* End container */}}
+
+{{ end }} {{/* Keep this closing marker */}}
+
