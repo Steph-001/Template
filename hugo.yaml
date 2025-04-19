@@ -1,6 +1,6 @@
 baseURL: "https://example.org/" # Change to your actual base URL
 languageCode: "en-us"
-title: "   Your English Class Website" # Change to your site title
+title: " This is the template" # Change to your site title
 # theme: "docsy"  # <--- REMOVE or COMMENT OUT this line
 
 outputs: # Top-level default outputs
