@@ -11,7 +11,7 @@ weight: 1
 {{< gallery max_width="150px" >}}
 
 ### B - A stereotypical detective
-
+{{< audio src="15.mp3" width="400px" >}}
 ### C - A masculine atmosphere
 
 {{< local-video src="prime_suspect.mp4" poster="tennison.jpg" max_width="300px" align="left" >}}

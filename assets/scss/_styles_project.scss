@@ -110,4 +110,31 @@
 }
 
 // --- End Gallery Styling ---
+// Audio Player
 
+.audio-player-wrapper {
+  margin-bottom: 1rem; // Add some space below the player
+  max-width: 100%; // Ensure it doesn't overflow its container
+
+  audio {
+    vertical-align: middle; // Helps with inline alignment issues if they occur
+  }
+}
+
+// Alignment Helpers
+// These rely on the wrapper having a defined width (which it gets from the 'width' parameter)
+.audio-left {
+  margin-right: auto; // Pushes others away, effectively left-aligning
+  margin-left: 0;
+}
+
+.audio-center {
+  margin-left: auto;
+  margin-right: auto; // Centers the block element
+}
+
+.audio-right {
+  margin-left: auto; // Pushes itself to the right
+  margin-right: 0;
+}
+// --- End Audio Player ---

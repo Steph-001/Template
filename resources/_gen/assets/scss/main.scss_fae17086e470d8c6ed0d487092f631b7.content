@@ -19873,4 +19873,22 @@ div.drawioframe {
   .gallery-item img {
     max-width: 23%; } }
 
+.audio-player-wrapper {
+  margin-bottom: 1rem;
+  max-width: 100%; }
+  .audio-player-wrapper audio {
+    vertical-align: middle; }
+
+.audio-left {
+  margin-right: auto;
+  margin-left: 0; }
+
+.audio-center {
+  margin-left: auto;
+  margin-right: auto; }
+
+.audio-right {
+  margin-left: auto;
+  margin-right: 0; }
+
 /*# sourceMappingURL=main.css.map */
