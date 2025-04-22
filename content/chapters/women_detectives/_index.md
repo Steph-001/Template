@@ -14,6 +14,8 @@ weight: 1
 {{< audio src="15.mp3" width="400px" >}}
 ### C - A masculine atmosphere
 
+{{< recent-blog-posts >}}
+
 {{< local-video src="prime_suspect.mp4" poster="tennison.jpg" max_width="300px" align="left" >}}
 
 ### D - The No.1 Ladies' Detective Agency

@@ -19891,4 +19891,11 @@ div.drawioframe {
   margin-left: auto;
   margin-right: 0; }
 
+.td-section-index .td-blog-posts-section,
+.section-index .td-blog-posts-section {
+  display: none !important; }
+
+.td-content .td-blog-posts-section {
+  display: block; }
+
 /*# sourceMappingURL=main.css.map */

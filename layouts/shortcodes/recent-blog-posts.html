@@ -1,0 +1,19 @@
+<div class="td-blog-posts-section">
+  <h2>Recent News</h2>
+  <hr class="panel-line">
+  <div class="row justify-content-center">
+    {{ $posts := where site.RegularPages "Section" "news" }}
+    {{ range first 3 $posts.ByDate.Reverse }}
+      <div class="col-lg-8 mb-4">
+        <div class="card h-100" style="border-width: 2px;">
+          <div class="card-body">
+            <h5 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h5>
+            <p class="card-text text-muted mb-2">{{ .Date.Format "January 2, 2006" }}</p>
+            <p class="card-text">{{ .Description | default .Summary | truncate 120 }}</p>
+            <a href="{{ .RelPermalink }}" class="card-link">Read more</a>
+          </div>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</div>
