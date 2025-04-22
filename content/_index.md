@@ -20,4 +20,4 @@ This website is work in progress. It is meant to centralise all information and 
 The [Teaching Units](/docs/) section will contain the list of your course units.
 
 
-{{< recent-blog-posts >}}
+{{< recent-news-widget >}}
