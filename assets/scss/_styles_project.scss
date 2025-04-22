@@ -139,13 +139,3 @@
 }
 // --- End Audio Player --
 
-// Hide any automatically displayed blog posts
-.td-section-index .td-blog-posts-section,
-.section-index .td-blog-posts-section {
-  display: none !important;
-}
-
-// Only show blog posts section when explicitly included via shortcode
-.td-content .td-blog-posts-section {
-  display: block;
-}
